@@ -7,21 +7,22 @@ open System.Net
 open Titanium.Web.Proxy.EventArguments
 open System.Threading.Tasks
 open FSharp.Control.Tasks.V2
+open System.IO
 
+let blankImg = File.ReadAllBytes("Images/blank.png")
 // Define a function to construct a message to print
 let onRequest sender (e:SessionEventArgs): Task =
     task {
-        Console.WriteLine (e.HttpClient.Request.Url)
         let responseHeaders = e.HttpClient.Response.Headers;
-    
         if (e.HttpClient.Request.Method = "GET" || e.HttpClient.Request.Method = "POST") then
             if (e.HttpClient.Response.StatusCode = 200) then
-                if (e.HttpClient.Response.ContentType |> isNull |> not
-                    && e.HttpClient.Response.ContentType.Trim().ToLower().Contains("text/html")) then
-  
-                    let! body = e.GetResponseBodyAsString();
-                    e.SetResponseBodyString(body);
-                    Console.WriteLine body
+                let contentType = e.HttpClient.Response.ContentType
+                if (contentType |> isNull |> not) then
+                    if contentType.ToLower().Contains("image") || 
+                        contentType.ToLower().Contains("video") then
+                        //let! body = e.GetResponseBodyAsString();
+                        e.SetResponseBody(blankImg);
+                        //Console.WriteLine (contentType + " -> " + (e.HttpClient.Request.Url))
     } 
     :> Task
 
