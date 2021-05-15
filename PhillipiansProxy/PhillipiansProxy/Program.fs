@@ -20,6 +20,7 @@ let onRequest sender (e:SessionEventArgs): Task =
                 if (contentType |> isNull |> not) then
                     if contentType.ToLower().Contains("image") || 
                         contentType.ToLower().Contains("video") then
+
                         //let! body = e.GetResponseBodyAsString();
                         e.SetResponseBody(blankImg);
                         //Console.WriteLine (contentType + " -> " + (e.HttpClient.Request.Url))
@@ -84,3 +85,5 @@ let main argv =
    
     proxyServer.Stop();
     0 // return an integer exit code
+
+    //phllipians_proxy_service_acct
