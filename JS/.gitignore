@@ -1,0 +1,9 @@
+# Visual Studio 2015 cache/options directory
+.vscode/
+bower_components/
+node_modules/
+
+
+#Exclude tsc generated files
+out/*.map
+out/*.js
