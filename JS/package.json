@@ -11,8 +11,10 @@
   "dependencies": {
     "@tensorflow/tfjs-node": "^3.8.0",
     "axios": "^0.21.1",
+    "http-proxy": "^1.18.1",
     "jpeg-js": "^0.3.7",
-    "nsfwjs": "^2.4.1"
+    "nsfwjs": "^2.4.1",
+    "proxy-chain": "^1.0.2"
   },
   "devDependencies": {
     "typescript": "^4.3.5"

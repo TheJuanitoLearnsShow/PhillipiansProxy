@@ -12,13 +12,13 @@ namespace TensorModel
 {
     public class ImageInputData
     {
-        [ImageType(299, 299)]
+        [ImageType(224, 224)]
         public Bitmap Image { get; set; }
     }
     public class ImageLabelPredictions
     {
         //TODO: Change to fixed output column name for TensorFlow model
-        [ColumnName("dense_3/Softmax")]
+        [ColumnName("sequential/prediction/Softmax")]
         public float[] PredictedLabels;
     }
     public class ImagePredictedLabelWithProbability
@@ -45,8 +45,8 @@ namespace TensorModel
 
         public struct ImageSettings
         {
-            public const int imageHeight = 299;
-            public const int imageWidth = 299;
+            public const int imageHeight = 224;
+            public const int imageWidth = 224;
             public const float mean = 117;         //offsetImage
             public const bool channelsLast = true; //interleavePixelColors
         }
@@ -55,10 +55,10 @@ namespace TensorModel
         public struct TensorFlowModelSettings
         {
             // input tensor name
-            public const string inputTensorName = "input_1";
+            public const string inputTensorName = "self";
 
             // output tensor name
-            public const string outputTensorName = "dense_3/Softmax";
+            public const string outputTensorName = "sequential/prediction/Softmax";
         }
 
         private ITransformer SetupMlnetModel(string tensorFlowModelFilePath)
