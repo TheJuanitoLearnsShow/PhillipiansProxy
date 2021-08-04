@@ -17,6 +17,7 @@ open System.Drawing
 type ProxyService(logger: ILogger<ProxyService>, predictionEnginePool: PredictionEnginePool<ImageInputData, ImageLabelPredictions>) = 
     let mutable proxyServer:ProxyServer = null
     let blankImg = File.ReadAllBytes("Images/blank.png")
+    let bitmapTypes = [| "jpeg"; "bmp"; "tiff"; "bitmap"; "png" |]
     // Define a function to construct a message to print
     let onRequest sender (e:SessionEventArgs): Task =
         task {
@@ -25,19 +26,21 @@ type ProxyService(logger: ILogger<ProxyService>, predictionEnginePool: Predictio
                 if (e.HttpClient.Response.StatusCode = 200) then
                     let contentType = e.HttpClient.Response.ContentType
                     if (contentType |> isNull |> not) then
-                        //if contentType.ToLower().Contains("image") || 
+                        let ct = contentType.ToLower()//if contentType.ToLower().Contains("image") || 
                         //    contentType.ToLower().Contains("video") then
-                        if contentType.ToLower().Contains("image") then
+                        if ct.ToLower().Contains("image") && bitmapTypes |> Array.tryFind (ct.Contains) |> Option.isSome then
                             let! rawBytes = e.GetResponseBody()
                             //Convert to Bitmap
                             let bitmapImage = new MemoryStream(rawBytes) |> Image.FromStream :?> Bitmap;
 
                             //Set the specific image data into the ImageInputData type used in the DataView
                             let imageInputData: ImageInputData =  { Image = bitmapImage };
-                            let prediction = predictionEnginePool.Predict("ImageModel", imageInputData)
-                            Console.WriteLine(prediction);
+                            let prediction = predictionEnginePool.Predict("ImageModel", imageInputData) 
+                            let predictedResult = prediction.ToHelper()
+                            Console.WriteLine(predictedResult.ToString() + " -> " + (e.HttpClient.Request.Url));
                             //let! body = e.GetResponseBodyAsString();
-                            e.SetResponseBody(blankImg);
+                            if (predictedResult.H > 0.7f) || (predictedResult.P > 0.7f) || (predictedResult.S > 0.9f) then
+                                e.SetResponseBody(blankImg);
                             //Console.WriteLine (contentType + " -> " + (e.HttpClient.Request.Url))
         } 
         :> Task

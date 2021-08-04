@@ -28,10 +28,10 @@ namespace TensorModel
                 //Predict code for provided image
                 ImageLabelPredictions imageLabelPredictions = _predictionEnginePool.Predict(imageInputData);
                 //labels 
-                // 0 Sexy -> Block > 0.70
-                // 1 Porn  -> Block > 0.70
-                // 2 Neutral
-                // 3 Hentai -> Block > 0.70
+                // 0  -> Block > 0.70
+                // 1   -> Block > 0.70
+                // 2 
+                // 3  -> Block > 0.70
                 // 4 Drawing
                 //Predict the image's label (The one with highest probability)
                 //ImagePredictedLabelWithProbability imageBestLabelPrediction
@@ -52,7 +52,7 @@ namespace TensorModel
             // Save the ML.NET model .zip file based on the TensorFlow model and related configuration
             _predictionEnginePool = tensorFlowModelConfigurator.SaveMLNetModel(_mlnetModelFilePath);
 
-            ClassifyImage(@"E:\test\DSC01731.JPG");
+            ClassifyImage(@"E:\test\th.jpg");
             Console.ReadLine();
         }
     }
