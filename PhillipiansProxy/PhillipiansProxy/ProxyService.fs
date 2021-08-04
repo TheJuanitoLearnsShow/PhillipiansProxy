@@ -37,9 +37,9 @@ type ProxyService(logger: ILogger<ProxyService>, predictionEnginePool: Predictio
                             let imageInputData: ImageInputData =  { Image = bitmapImage };
                             let prediction = predictionEnginePool.Predict("ImageModel", imageInputData) 
                             let predictedResult = prediction.ToHelper()
-                            Console.WriteLine(predictedResult.ToString() + " -> " + (e.HttpClient.Request.Url));
                             //let! body = e.GetResponseBodyAsString();
                             if (predictedResult.H > 0.7f) || (predictedResult.P > 0.7f) || (predictedResult.S > 0.9f) then
+                                Console.WriteLine(predictedResult.ToString() + " -> " + (e.HttpClient.Request.Url));
                                 e.SetResponseBody(blankImg);
                             //Console.WriteLine (contentType + " -> " + (e.HttpClient.Request.Url))
         } 
