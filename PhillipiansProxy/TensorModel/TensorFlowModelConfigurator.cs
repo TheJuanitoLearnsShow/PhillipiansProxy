@@ -17,7 +17,6 @@ namespace TensorModel
     }
     public class ImageLabelPredictions
     {
-        //TODO: Change to fixed output column name for TensorFlow model
         [ColumnName("sequential/prediction/Softmax")]
         public float[] PredictedLabels;
     }
