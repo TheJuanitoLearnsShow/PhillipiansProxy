@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 namespace TensorModel
 {
-    
-    
     class Program
     {
         private static readonly string _mlnetModelFilePath = "nsfw_net.zip";
@@ -42,17 +40,23 @@ namespace TensorModel
             }
         }
 
+        
         static void Main(string[] args)
         {
             var _tensorFlowModelFilePath = @"E:\test\mobilenet_v2_140_224\frozen_graph.pb";
+            var imgFile = @"E:\test\s1.JPG";
+            //var imgFile = @"E:\test\th2.jpg";
             /////////////////////////////////////////////////////////////////
             //Configure the ML.NET model for the pre-trained TensorFlow model
-            TensorFlowModelConfigurator tensorFlowModelConfigurator = new TensorFlowModelConfigurator(_tensorFlowModelFilePath);
+            //ensorFlowModelConfigurator tensorFlowModelConfigurator = new TensorFlowModelConfigurator(_tensorFlowModelFilePath);
 
             // Save the ML.NET model .zip file based on the TensorFlow model and related configuration
-            _predictionEnginePool = tensorFlowModelConfigurator.SaveMLNetModel(_mlnetModelFilePath);
+            //_predictionEnginePool = tensorFlowModelConfigurator.SaveMLNetModel(_mlnetModelFilePath);
 
-            ClassifyImage(@"E:\test\th.jpg");
+            //ClassifyImage(@"E:\test\th2.jpg");
+
+            var m = new TensorFlowNet();
+            m.Run(imgFile);
             Console.ReadLine();
         }
     }

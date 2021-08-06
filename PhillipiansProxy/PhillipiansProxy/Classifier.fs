@@ -23,18 +23,20 @@ type PredictionHelper = {
 [<CLIMutable>]
 type ImageLabelPredictions = {
     [<ColumnName("sequential/prediction/Softmax")>]
-    PredictedLabels: Microsoft.ML.Data.VBuffer<single>
+    PredictedLabels: single[]
 }
 with
     member x.ToHelper() =
-        let arr = x.PredictedLabels.GetValues()
+        //let arr = x.PredictedLabels.GetValues()
+        let arr = x.PredictedLabels
         {
             S = arr.[0]
             P = arr.[1]
             H = arr.[3]
         }
     override x.ToString() =
-        let arr = x.PredictedLabels.GetValues()
+        //let arr = x.PredictedLabels.GetValues()
+        let arr = x.PredictedLabels
         String.Format( "S {0} P {1} N {2} H {2} D {2}" ,  arr.[0],  arr.[1], arr.[2], arr.[3], arr.[4])
 
 

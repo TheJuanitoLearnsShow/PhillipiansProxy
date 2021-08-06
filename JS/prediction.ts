@@ -49,10 +49,18 @@ export async function predictFromFileContents(buffer) {
 }
 
 const filename = 'E:\\test\\DSC01731.JPG'
+const filename2 = 'E:\\test\\th2.JPG'
 
-load_model().then(() => 
+load_model().then(() => {
+
   fs.readFile( filename, (err, imgContents) => {
 
     predictFromFileContents(imgContents)
+    fs.readFile( filename2, (err, imgContents2) => {
+
+      predictFromFileContents(imgContents2)
+    })
   })
+  
+}
 )

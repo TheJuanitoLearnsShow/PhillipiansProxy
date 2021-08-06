@@ -26,8 +26,8 @@ type ProxyService(logger: ILogger<ProxyService>, predictionEnginePool: Predictio
                 if (e.HttpClient.Response.StatusCode = 200) then
                     let contentType = e.HttpClient.Response.ContentType
                     if (contentType |> isNull |> not) then
-                        let ct = contentType.ToLower()//if contentType.ToLower().Contains("image") || 
-                        //    contentType.ToLower().Contains("video") then
+                        let ct = contentType.ToLower()
+                        
                         if ct.ToLower().Contains("image") && bitmapTypes |> Array.tryFind (ct.Contains) |> Option.isSome then
                             let! rawBytes = e.GetResponseBody()
                             //Convert to Bitmap
@@ -41,7 +41,6 @@ type ProxyService(logger: ILogger<ProxyService>, predictionEnginePool: Predictio
                             if (predictedResult.H > 0.7f) || (predictedResult.P > 0.7f) || (predictedResult.S > 0.9f) then
                                 Console.WriteLine(predictedResult.ToString() + " -> " + (e.HttpClient.Request.Url));
                                 e.SetResponseBody(blankImg);
-                            //Console.WriteLine (contentType + " -> " + (e.HttpClient.Request.Url))
         } 
         :> Task
     let h = AsyncEventHandler(onRequest)
