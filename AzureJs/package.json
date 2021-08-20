@@ -1,0 +1,14 @@
+{
+  "name": "",
+  "version": "",
+  "description": "",
+  "scripts": {
+    "test": "echo \"No tests yet...\""
+  },
+  "author": "",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^3.8.0",
+    "jpeg-js": "^0.4.3",
+    "nsfwjs": "^2.4.1"
+  }
+}
