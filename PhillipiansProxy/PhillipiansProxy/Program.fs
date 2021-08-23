@@ -11,15 +11,12 @@ open System.IO
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.DependencyInjection
 open PhillipiansProxy
-open Microsoft.Extensions.ML
-
-
 
 let _modelPath = "MLModel/nsfw_net.zip"
 let CreateHostBuilder(args)  =
     Host.CreateDefaultBuilder(args)
         .ConfigureServices(fun (hostContext:HostBuilderContext) (services) ->
-            services.AddPredictionEnginePool<ImageInputData, ImageLabelPredictions>().FromFile( "ImageModel", _modelPath, true) |> ignore
+            //services.AddPredictionEnginePool<ImageInputData, ImageLabelPredictions>().FromFile( "ImageModel", _modelPath, true) |> ignore
             services.AddHostedService<ProxyService>() |> ignore
         );
 

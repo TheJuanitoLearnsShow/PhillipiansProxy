@@ -11,10 +11,9 @@ open System
 open System.Net
 open FSharp.Control.Tasks.V2
 open System.IO
-open Microsoft.Extensions.ML
 open System.Drawing
 
-type ProxyService(logger: ILogger<ProxyService>, predictionEnginePool: PredictionEnginePool<ImageInputData, ImageLabelPredictions>) = 
+type ProxyService(logger: ILogger<ProxyService>) = 
     let mutable proxyServer:ProxyServer = null
     let blankImg = File.ReadAllBytes("Images/blank.png")
     let bitmapTypes = [| "jpeg"; "bmp"; "tiff"; "bitmap"; "png" |]
@@ -31,16 +30,17 @@ type ProxyService(logger: ILogger<ProxyService>, predictionEnginePool: Predictio
                         if ct.ToLower().Contains("image") && bitmapTypes |> Array.tryFind (ct.Contains) |> Option.isSome then
                             let! rawBytes = e.GetResponseBody()
                             //Convert to Bitmap
-                            let bitmapImage = new MemoryStream(rawBytes) |> Image.FromStream :?> Bitmap;
+                            let bitmapImage = new MemoryStream(rawBytes) |> System.Drawing.Image.FromStream :?> Bitmap;
+                            e.SetResponseBody(blankImg);
 
                             //Set the specific image data into the ImageInputData type used in the DataView
-                            let imageInputData: ImageInputData =  { Image = bitmapImage };
-                            let prediction = predictionEnginePool.Predict("ImageModel", imageInputData) 
-                            let predictedResult = prediction.ToHelper()
-                            //let! body = e.GetResponseBodyAsString();
-                            if (predictedResult.H > 0.7f) || (predictedResult.P > 0.7f) || (predictedResult.S > 0.9f) then
-                                Console.WriteLine(predictedResult.ToString() + " -> " + (e.HttpClient.Request.Url));
-                                e.SetResponseBody(blankImg);
+                            //let imageInputData: ImageInputData =  { Image = bitmapImage };
+                            //let prediction = predictionEnginePool.Predict("ImageModel", imageInputData) 
+                            //let predictedResult = prediction.ToHelper()
+                            ////let! body = e.GetResponseBodyAsString();
+                            //if (predictedResult.H > 0.7f) || (predictedResult.P > 0.7f) || (predictedResult.S > 0.9f) then
+                            //    Console.WriteLine(predictedResult.ToString() + " -> " + (e.HttpClient.Request.Url));
+                            //    e.SetResponseBody(blankImg);
         } 
         :> Task
     let h = AsyncEventHandler(onRequest)
@@ -62,8 +62,8 @@ type ProxyService(logger: ILogger<ProxyService>, predictionEnginePool: Predictio
                     endPoint.GetType().Name, endPoint.IpAddress, endPoint.Port);
        
             // Only explicit proxies can be set as system proxy!
-            proxyServer.SetAsSystemHttpProxy(explicitEndPoint);
-            proxyServer.SetAsSystemHttpsProxy(explicitEndPoint);
+            //proxyServer.SetAsSystemHttpProxy(explicitEndPoint);
+            //proxyServer.SetAsSystemHttpsProxy(explicitEndPoint);
 
             Task.CompletedTask
 
@@ -73,7 +73,7 @@ type ProxyService(logger: ILogger<ProxyService>, predictionEnginePool: Predictio
             //proxyServer.BeforeRequest -= OnRequest;
             proxyServer.remove_BeforeResponse h;
     
-            proxyServer.DisableAllSystemProxies()
+            //proxyServer.DisableAllSystemProxies()
             proxyServer.Stop();
             Task.CompletedTask
 
