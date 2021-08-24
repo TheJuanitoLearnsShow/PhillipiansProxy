@@ -58,7 +58,7 @@ type ProxyService(logger: ILogger<ProxyService>) =
             proxyServer.Start();
             
             for endPoint in proxyServer.ProxyEndPoints do
-                Console.WriteLine("Listening on '{0}' endpoint at Ip {1} and port: {2} ",
+                logger.LogInformation("Listening on '{0}' endpoint at Ip {1} and port: {2} ",
                     endPoint.GetType().Name, endPoint.IpAddress, endPoint.Port);
        
             // Only explicit proxies can be set as system proxy!
