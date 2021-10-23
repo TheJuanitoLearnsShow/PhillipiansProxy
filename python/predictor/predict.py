@@ -55,6 +55,13 @@ def load_model(model_path):
     	raise ValueError("saved_model_path must be the valid directory of a saved model to load.")
     
     model = tf.keras.models.load_model(model_path, custom_objects={'KerasLayer': hub.KerasLayer})
+
+    # model.save('nsfw_jpt_weights', save_format='h5')
+    # model_json = model.to_json()
+    # with open("nsfw_jpt_model.json", "w") as json_file:
+    #     json_file.write(model_json)
+
+
     return model
 
 
@@ -83,7 +90,18 @@ def classify_nd(model, nd_images):
 
 
 def main(args=None):
-    model = load_model("E:\\test\\mobilenet_v2_140_224\\saved_model.h5")
+
+    
+    # model = tf.keras.models.load_model("E:\\test\\mobilenet_v2_140_224\\imagenet_mobilenet_v2_140_224_feature_vector_4", 
+    #     custom_objects={'KerasLayer': hub.KerasLayer})
+
+    # model.save('nsfw_jpt_weights', save_format='h5')
+    # model_json = model.to_json()
+    # with open("nsfw_jpt_model.json", "w") as json_file:
+    #     json_file.write(model_json)
+
+
+    model = load_model("E:\\test\\mobilenet_v2_140_224\\") #frozen_graph saved_model
 
     # Predict single image
     image_preds = classify(model, 'E:\\test\\s1.JPG')
