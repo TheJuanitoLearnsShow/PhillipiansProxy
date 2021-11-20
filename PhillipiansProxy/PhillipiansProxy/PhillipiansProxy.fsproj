@@ -7,9 +7,7 @@
   <ItemGroup>
     <Compile Include="Classifier.fs" />
     <Compile Include="ProxyService.fs" />
-    <None Include="MLModel\nsfw_net.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -23,12 +21,13 @@
   <ItemGroup>
     <!--<PackageReference Include="Google.Apis" Version="1.51.0" />-->
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.1" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="TaskBuilder.fs" Version="2.1.0" />
-    <PackageReference Include="Titanium.Web.Proxy" Version="3.1.1344" />
+    <PackageReference Include="Titanium.Web.Proxy" Version="3.1.1397" />
     <PackageReference Include="NsfwSpy" Version="2.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="5.0.1" />
+    <PackageReference Update="FSharp.Core" Version="6.0.1" />
   </ItemGroup>
 </Project>

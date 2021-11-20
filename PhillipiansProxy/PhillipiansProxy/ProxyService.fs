@@ -37,6 +37,7 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy) =
                         if ct.ToLower().Contains("image") && bitmapTypes |> Array.tryFind (ct.Contains) |> Option.isSome then
                             let! rawBytes = e.GetResponseBody()
                             let prediction = nsfwEngine.ClassifyImage(rawBytes)
+                            logger.LogInformation(prediction.Sexy.ToString() + " -> " + (e.HttpClient.Request.Url))
                             //Convert to Bitmap
                             //let bitmapImage = new MemoryStream(rawBytes) |> System.Drawing.Image.FromStream :?> Bitmap;
                             e.SetResponseBody(blankImg);
