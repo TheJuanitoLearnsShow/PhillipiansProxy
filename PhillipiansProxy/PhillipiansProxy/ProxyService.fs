@@ -15,12 +15,26 @@ open System.Drawing
 open System.Diagnostics
 open System.IO.Pipes
 open NsfwSpyNS
+open Microsoft.Extensions.Configuration
 
-type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy) = 
+type ProxyServiceConfiguration()=
+    member val PornBlockerImageFilePath = "Images/blank.png" with get, set
+    member val SexyBlockerImageFilePath = "Images/blank.png" with get, set
+    member val HentaiBlockerImageFilePath = "Images/blank.png" with get, set
+    member val PornBlockerThreshold = 0.30f  with get, set
+    member val SexyBlockerThreshold = 0.40f with get, set
+    member val HentaiBlockerThreshold = 0.30f with get, set
+
+    
+
+type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configuration: IConfiguration) = 
     let mutable proxyServer:ProxyServer = null
     let predictorFolderPath = @"E:\OneDrive\sources\PhillipiansProxy\JS\out\"
     let predictorPath = @"index.js"
-    let blankImg = File.ReadAllBytes("Images/blank.png")
+    let proxyConf = configuration.GetSection(nameof ProxyServiceConfiguration).Get<ProxyServiceConfiguration>()
+    let pornBlockerImageFile = File.ReadAllBytes(proxyConf.PornBlockerImageFilePath)
+    let sexyBlockerImageFile = File.ReadAllBytes(proxyConf.SexyBlockerImageFilePath)
+    let hentaiBlockerImageFile = File.ReadAllBytes(proxyConf.HentaiBlockerImageFilePath)
     let bitmapTypes = [| "jpeg"; "bmp"; "tiff"; "bitmap"; "png" |]
 
     
@@ -34,17 +48,37 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy) =
                     if (contentType |> isNull |> not) then
                         let ct = contentType.ToLower()
                         
-                        if ct.ToLower().Contains("image") && bitmapTypes |> Array.tryFind (ct.Contains) |> Option.isSome then
+                        if ct.Contains("image") && bitmapTypes |> Array.tryFind (ct.Contains) |> Option.isSome then
                             try
                                 let! rawBytes = e.GetResponseBody()
                                 let prediction = nsfwEngine.ClassifyImage(rawBytes)
                                 //logger.LogInformation(prediction.Sexy.ToString() + " -> " + (e.HttpClient.Request.Url))
                                 // TODO: cahce image hash and prediction?
-                                if prediction.Sexy >= 0.40f || prediction.Pornography > 0.30f || prediction.Hentai > 0.30f then
-                                    e.SetResponseBody(blankImg);
+                                
+                                if prediction.Pornography > proxyConf.PornBlockerThreshold then
+                                    e.SetResponseBody(pornBlockerImageFile)
+                                elif prediction.Hentai > proxyConf.HentaiBlockerThreshold then 
+                                    e.SetResponseBody(hentaiBlockerImageFile)
+                                elif prediction.Sexy > proxyConf.SexyBlockerThreshold then 
+                                    e.SetResponseBody(sexyBlockerImageFile)
                             with
                             | exn ->
-                                e.SetResponseBody(blankImg);
+                                e.SetResponseBody(sexyBlockerImageFile);
+
+                        if ct.Contains("/gif")  then
+                            try
+                                let! rawBytes = e.GetResponseBody()
+                                let prediction = nsfwEngine.ClassifyGif(rawBytes, null)
+                                                           
+                                if prediction.TopPornographyScore > proxyConf.PornBlockerThreshold then
+                                    e.SetResponseBody(pornBlockerImageFile)
+                                elif prediction.TopHentaiScore > proxyConf.HentaiBlockerThreshold then 
+                                    e.SetResponseBody(hentaiBlockerImageFile)
+                                elif prediction.TopSexyScore > proxyConf.SexyBlockerThreshold then 
+                                    e.SetResponseBody(sexyBlockerImageFile)
+                            with
+                            | exn ->
+                                e.SetResponseBody(sexyBlockerImageFile);
                             //Set the specific image data into the ImageInputData type used in the DataView
                             //let imageInputData: ImageInputData =  { Image = bitmapImage };
                             //let prediction = predictionEnginePool.Predict("ImageModel", imageInputData) 

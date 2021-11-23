@@ -25,6 +25,11 @@ namespace NsfwSpyNS
         /// </summary>
         public bool IsNsfw => Frames.Any(f => f.Value.IsNsfw);
 
+
+        public float TopSexyScore => Frames.Max(f => f.Value.Sexy);
+        public float TopPornographyScore => Frames.Max(f => f.Value.Pornography);
+        public float TopHentaiScore => Frames.Max(f => f.Value.Hentai);
+
         public NsfwSpyGifResult(Dictionary<int, NsfwSpyResult> frames)
         {
             Frames = frames;

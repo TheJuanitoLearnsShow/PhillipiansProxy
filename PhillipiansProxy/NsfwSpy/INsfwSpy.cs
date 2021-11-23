@@ -17,5 +17,6 @@ namespace NsfwSpyNS
         Task<NsfwSpyResult> ClassifyImageAsync(string filePath);
         Task<NsfwSpyResult> ClassifyImageAsync(Uri uri, WebClient webClient = null);
         List<NsfwSpyValue> ClassifyImages(IEnumerable<string> filesPaths, Action<string, NsfwSpyResult> actionAfterEachClassify = null);
+        NsfwSpyGifResult ClassifyGif(byte[] gifImage, GifOptions gifOptions = null);
     }
 }
