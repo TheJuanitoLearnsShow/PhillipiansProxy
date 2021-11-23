@@ -13,15 +13,16 @@ open Microsoft.Extensions.DependencyInjection
 open PhillipiansProxy
 open Microsoft.Extensions.Logging
 open NsfwSpyNS
+open Microsoft.Extensions.ML
 
-let _modelPath = "MLModel/nsfw_net.zip"
+let _modelPath = Path.Combine(AppContext.BaseDirectory, "NsfwSpyModel.zip") 
 let CreateHostBuilder(args)  =
     Host.CreateDefaultBuilder(args)
         .ConfigureServices(fun (hostContext:HostBuilderContext) (services) ->
             services.AddLogging(fun configure -> configure.AddConsole() |> ignore ) |> ignore
             services.AddScoped<INsfwSpy, NsfwSpy>() |> ignore
 
-            //services.AddPredictionEnginePool<ImageInputData, ImageLabelPredictions>().FromFile( "ImageModel", _modelPath, true) |> ignore
+            services.AddPredictionEnginePool<NsfwSpyNS.ModelInput, NsfwSpyNS.ModelOutput>().FromFile( "ImageModel", _modelPath, true) |> ignore
             services.AddHostedService<ProxyService>() |> ignore
         );
 

@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net60</TargetFramework>
+    <Authors>d00M_L0rDz</Authors>
+    <Company>d00M_L0rDz</Company>
+    <PackageTags>nsfw nude nudity porn pornography explicit image detect detection classification classifier</PackageTags>
+    <Description>An image classifier to identify explicit/pornographic images.</Description>
+    <RepositoryUrl>https://github.com/d00ML0rDz/NsfwSpy</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/d00ML0rDz/NsfwSpy</PackageProjectUrl>
+    <PackageIcon>NsfwSpy-Icon.png</PackageIcon>
+    <PackageIconUrl />
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Version>2.5.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.ML" Version="1.7.0" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="8.4.0" />
+    <PackageReference Include="Microsoft.ML" Version="1.7.0" />
+    <PackageReference Include="Microsoft.ML.Vision" Version="1.7.0" />
+
+    <!--<PackageReference Include="Microsoft.ML" Version="1.6.0" />
+    <PackageReference Include="Microsoft.ML.Vision" Version="1.6.0" />-->
+    <!--<PackageReference Include="SciSharp.TensorFlow.Redist-Linux-GPU" Version="2.3.1" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist-Windows-GPU" Version="2.3.1" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="NsfwSpy-Icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="NsfwSpy-Icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="NsfwSpyModel.zip">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </None>
+    <!--<None Update="tensorflow.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>-->
+  </ItemGroup>
+
+</Project>

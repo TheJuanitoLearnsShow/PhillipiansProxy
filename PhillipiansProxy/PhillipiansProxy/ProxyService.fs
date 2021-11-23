@@ -35,13 +35,15 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy) =
                         let ct = contentType.ToLower()
                         
                         if ct.ToLower().Contains("image") && bitmapTypes |> Array.tryFind (ct.Contains) |> Option.isSome then
-                            let! rawBytes = e.GetResponseBody()
-                            let prediction = nsfwEngine.ClassifyImage(rawBytes)
-                            logger.LogInformation(prediction.Sexy.ToString() + " -> " + (e.HttpClient.Request.Url))
-                            // TODO: cahce image hash and prediction?
-                            //Convert to Bitmap
-                            //let bitmapImage = new MemoryStream(rawBytes) |> System.Drawing.Image.FromStream :?> Bitmap;
-                            if prediction.Sexy > 0.75f || prediction.Pornography > 0.50f || prediction.Hentai > 0.50f then
+                            try
+                                let! rawBytes = e.GetResponseBody()
+                                let prediction = nsfwEngine.ClassifyImage(rawBytes)
+                                //logger.LogInformation(prediction.Sexy.ToString() + " -> " + (e.HttpClient.Request.Url))
+                                // TODO: cahce image hash and prediction?
+                                if prediction.Sexy >= 0.40f || prediction.Pornography > 0.30f || prediction.Hentai > 0.30f then
+                                    e.SetResponseBody(blankImg);
+                            with
+                            | exn ->
                                 e.SetResponseBody(blankImg);
                             //Set the specific image data into the ImageInputData type used in the DataView
                             //let imageInputData: ImageInputData =  { Image = bitmapImage };

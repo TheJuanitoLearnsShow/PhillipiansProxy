@@ -14,18 +14,18 @@
     <None Include="Images\blank.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Settings.job">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <!--<PackageReference Include="Google.Apis" Version="1.51.0" />-->
+    <PackageReference Include="Microsoft.Extensions.ML" Version="1.7.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.1" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="TaskBuilder.fs" Version="2.1.0" />
     <PackageReference Include="Titanium.Web.Proxy" Version="3.1.1397" />
-    <PackageReference Include="NsfwSpy" Version="2.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NsfwSpy\NsfwSpy.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="6.0.1" />

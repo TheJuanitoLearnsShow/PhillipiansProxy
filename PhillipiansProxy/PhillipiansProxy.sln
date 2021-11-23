@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31507.150
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "PhillipiansProxy", "PhillipiansProxy\PhillipiansProxy.fsproj", "{CDCCE45F-D6B5-43B6-A475-4826D63A22E3}"
 EndProject
@@ -9,7 +9,9 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ImageClassificationTest", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensorModel", "TensorModel\TensorModel.csproj", "{1585CC39-EA77-4983-A762-98D74A7584E5}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "NetToNodeJsTest", "NetToNodeJsTest\NetToNodeJsTest.fsproj", "{F74D954E-32DC-4F55-95B0-CAE354F42798}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "NetToNodeJsTest", "NetToNodeJsTest\NetToNodeJsTest.fsproj", "{F74D954E-32DC-4F55-95B0-CAE354F42798}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NsfwSpy", "..\..\..\..\Sources\public\NsfwSpy\NsfwSpy\NsfwSpy.csproj", "{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,26 @@ Global
 		{F74D954E-32DC-4F55-95B0-CAE354F42798}.Release|x64.Build.0 = Release|Any CPU
 		{F74D954E-32DC-4F55-95B0-CAE354F42798}.Release|x86.ActiveCfg = Release|Any CPU
 		{F74D954E-32DC-4F55-95B0-CAE354F42798}.Release|x86.Build.0 = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|ARM.Build.0 = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|x64.Build.0 = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Debug|x86.Build.0 = Debug|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|ARM.ActiveCfg = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|ARM.Build.0 = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|ARM64.Build.0 = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|x64.ActiveCfg = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|x64.Build.0 = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|x86.ActiveCfg = Release|Any CPU
+		{62AB0375-8A99-4D95-8939-A3E9EB1FBA12}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
