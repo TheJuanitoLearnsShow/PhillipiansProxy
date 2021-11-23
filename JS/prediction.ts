@@ -3,11 +3,11 @@ const tf = require('@tensorflow/tfjs-node')
 const nsfw = require('nsfwjs')
 const fs = require('fs')
 const jpeg = require('jpeg-js')
-const { consoleLogToFile } = require("console-log-to-file/dist/index.cjs.js")
+// const { consoleLogToFile } = require("console-log-to-file/dist/index.cjs.js")
 
-consoleLogToFile({
-  logFilePath: "./default.log",
-});
+// consoleLogToFile({
+//   logFilePath: "./default.log",
+// });
 
 const ml_model = 'file://./model/'
 //const model = await nsfw.load() // To load a local model, nsfw.load('file://./path/to/model/')
@@ -69,17 +69,17 @@ load_model().then(() => {
     })
   })
   
-  const readline = require('readline');
+  // const readline = require('readline');
   
-  console.log(process.argv[2])
+  // console.log(process.argv[2])
   
-  console.log(process.argv[3])
+  // console.log(process.argv[3])
 
-  const reader = fs.createReadStream(null, {fd: process.argv[2]});
-  const writer = fs.createWriteStream(null, {fd: process.argv[3]});
+  // const reader = fs.createReadStream(null, {fd: process.argv[2]});
+  // const writer = fs.createWriteStream(null, {fd: process.argv[3]});
 
-  reader.on('data', data => predictFromFileContents( data, writer));
+  // reader.on('data', data => predictFromFileContents( data, writer));
 
-  setInterval(()=> {}, 1000 * 60 * 60);
+  // setInterval(()=> {}, 1000 * 60 * 60);
 }
 )
