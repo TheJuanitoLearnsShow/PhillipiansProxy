@@ -24,6 +24,8 @@ type ProxyServiceConfiguration()=
     member val PornBlockerThreshold = 0.30f  with get, set
     member val SexyBlockerThreshold = 0.40f with get, set
     member val HentaiBlockerThreshold = 0.30f with get, set
+    member val WhiteListUrlPrefixes:string[] = [||] with get, set
+    member val WhiteListUrlRegexes:string[] = [||] with get, set
 
     
 
@@ -47,38 +49,43 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configura
                     let contentType = e.HttpClient.Response.ContentType
                     if (contentType |> isNull |> not) then
                         let ct = contentType.ToLower()
-                        
-                        if ct.Contains("image") && bitmapTypes |> Array.tryFind (ct.Contains) |> Option.isSome then
-                            try
-                                let! rawBytes = e.GetResponseBody()
-                                let prediction = nsfwEngine.ClassifyImage(rawBytes)
-                                //logger.LogInformation(prediction.Sexy.ToString() + " -> " + (e.HttpClient.Request.Url))
-                                // TODO: cahce image hash and prediction?
+                        let url = e.HttpClient.Request.Url
+                        let isWhitelistUrl =
+                            proxyConf.WhiteListUrlPrefixes 
+                            |> Array.tryFind (fun u -> url.StartsWith(u, StringComparison.OrdinalIgnoreCase)) 
+                            |> Option.isSome
+                        if isWhitelistUrl |> not then
+                            if ct.Contains("image") && bitmapTypes |> Array.tryFind (ct.Contains) |> Option.isSome then
+                                try
+                                    let! rawBytes = e.GetResponseBody()
+                                    let prediction = nsfwEngine.ClassifyImage(rawBytes)
+                                    //logger.LogInformation(prediction.Sexy.ToString() + " -> " + (e.HttpClient.Request.Url))
+                                    // TODO: cahce image hash and prediction?
                                 
-                                if prediction.Pornography > proxyConf.PornBlockerThreshold then
-                                    e.SetResponseBody(pornBlockerImageFile)
-                                elif prediction.Hentai > proxyConf.HentaiBlockerThreshold then 
-                                    e.SetResponseBody(hentaiBlockerImageFile)
-                                elif prediction.Sexy > proxyConf.SexyBlockerThreshold then 
-                                    e.SetResponseBody(sexyBlockerImageFile)
-                            with
-                            | exn ->
-                                e.SetResponseBody(sexyBlockerImageFile);
+                                    if prediction.Pornography > proxyConf.PornBlockerThreshold then
+                                        e.SetResponseBody(pornBlockerImageFile)
+                                    elif prediction.Hentai > proxyConf.HentaiBlockerThreshold then 
+                                        e.SetResponseBody(hentaiBlockerImageFile)
+                                    elif prediction.Sexy > proxyConf.SexyBlockerThreshold then 
+                                        e.SetResponseBody(sexyBlockerImageFile)
+                                with
+                                | exn ->
+                                    e.SetResponseBody(sexyBlockerImageFile);
 
-                        if ct.Contains("/gif")  then
-                            try
-                                let! rawBytes = e.GetResponseBody()
-                                let prediction = nsfwEngine.ClassifyGif(rawBytes, null)
+                            if ct.Contains("/gif")  then
+                                try
+                                    let! rawBytes = e.GetResponseBody()
+                                    let prediction = nsfwEngine.ClassifyGif(rawBytes, null)
                                                            
-                                if prediction.TopPornographyScore > proxyConf.PornBlockerThreshold then
-                                    e.SetResponseBody(pornBlockerImageFile)
-                                elif prediction.TopHentaiScore > proxyConf.HentaiBlockerThreshold then 
-                                    e.SetResponseBody(hentaiBlockerImageFile)
-                                elif prediction.TopSexyScore > proxyConf.SexyBlockerThreshold then 
-                                    e.SetResponseBody(sexyBlockerImageFile)
-                            with
-                            | exn ->
-                                e.SetResponseBody(sexyBlockerImageFile);
+                                    if prediction.TopPornographyScore > proxyConf.PornBlockerThreshold then
+                                        e.SetResponseBody(pornBlockerImageFile)
+                                    elif prediction.TopHentaiScore > proxyConf.HentaiBlockerThreshold then 
+                                        e.SetResponseBody(hentaiBlockerImageFile)
+                                    elif prediction.TopSexyScore > proxyConf.SexyBlockerThreshold then 
+                                        e.SetResponseBody(sexyBlockerImageFile)
+                                with
+                                | exn ->
+                                    e.SetResponseBody(sexyBlockerImageFile);
                             //Set the specific image data into the ImageInputData type used in the DataView
                             //let imageInputData: ImageInputData =  { Image = bitmapImage };
                             //let prediction = predictionEnginePool.Predict("ImageModel", imageInputData) 
