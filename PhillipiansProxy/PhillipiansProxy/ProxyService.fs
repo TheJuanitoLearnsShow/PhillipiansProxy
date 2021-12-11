@@ -26,6 +26,7 @@ type ProxyServiceConfiguration()=
     member val HentaiBlockerThreshold = 0.30f with get, set
     member val WhiteListUrlPrefixes:string[] = [||] with get, set
     member val WhiteListUrlRegexes:string[] = [||] with get, set
+    member val ProxyCertPath:string = "" with get, set
 
     
 
@@ -34,6 +35,7 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configura
     let predictorFolderPath = @"E:\OneDrive\sources\PhillipiansProxy\JS\out\"
     let predictorPath = @"index.js"
     let proxyConf = configuration.GetSection(nameof ProxyServiceConfiguration).Get<ProxyServiceConfiguration>()
+    let proxyCertPassword = configuration.GetValue<string>("ProxyCertPassword")
     let pornBlockerImageFile = File.ReadAllBytes(proxyConf.PornBlockerImageFilePath)
     let sexyBlockerImageFile = File.ReadAllBytes(proxyConf.SexyBlockerImageFilePath)
     let hentaiBlockerImageFile = File.ReadAllBytes(proxyConf.HentaiBlockerImageFilePath)
@@ -86,21 +88,15 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configura
                                 with
                                 | exn ->
                                     e.SetResponseBody(sexyBlockerImageFile);
-                            //Set the specific image data into the ImageInputData type used in the DataView
-                            //let imageInputData: ImageInputData =  { Image = bitmapImage };
-                            //let prediction = predictionEnginePool.Predict("ImageModel", imageInputData) 
-                            //let predictedResult = prediction.ToHelper()
-                            ////let! body = e.GetResponseBodyAsString();
-                            //if (predictedResult.H > 0.7f) || (predictedResult.P > 0.7f) || (predictedResult.S > 0.9f) then
-                            //    Console.WriteLine(predictedResult.ToString() + " -> " + (e.HttpClient.Request.Url));
-                            //    e.SetResponseBody(blankImg);
+                            
         } 
         :> Task
     let h = AsyncEventHandler(onRequest)
 
     interface  IHostedService with 
         member x.StartAsync(cancellationToken: CancellationToken)=
-            proxyServer <- new ProxyServer();
+            proxyServer <- new ProxyServer(proxyConf.ProxyCertPath, "phillipiansproxy",true,true,true)
+            proxyServer.CertificateManager.PfxPassword <- proxyCertPassword
             // locally trust root certificate used by this proxy 
             proxyServer.CertificateManager.CertificateEngine <- Network.CertificateEngine.DefaultWindows; 
             proxyServer.CertificateManager.EnsureRootCertificate();
