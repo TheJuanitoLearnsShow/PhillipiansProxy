@@ -40,7 +40,7 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configura
     let sexyBlockerImageFile = File.ReadAllBytes(proxyConf.SexyBlockerImageFilePath)
     let hentaiBlockerImageFile = File.ReadAllBytes(proxyConf.HentaiBlockerImageFilePath)
     let bitmapTypes = [| "jpeg"; "bmp"; "tiff"; "bitmap"; "png" |]
-
+    let minFileSize = 1024 * 4
     
     
     let onRequest sender (e:SessionEventArgs): Task =
@@ -48,8 +48,9 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configura
             let responseHeaders = e.HttpClient.Response.Headers;
             if (e.HttpClient.Request.Method = "GET" || e.HttpClient.Request.Method = "POST") then
                 if (e.HttpClient.Response.StatusCode = 200) then
-                    let contentType = e.HttpClient.Response.ContentType
-                    if (contentType |> isNull |> not) then
+                    let response = e.HttpClient.Response
+                    let contentType = response.ContentType
+                    if (contentType |> isNull |> not && response.ContentLength >= minFileSize) then
                         let ct = contentType.ToLower()
                         let url = e.HttpClient.Request.Url
                         let isWhitelistUrl =
@@ -61,8 +62,6 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configura
                                 try
                                     let! rawBytes = e.GetResponseBody()
                                     let prediction = nsfwEngine.ClassifyImage(rawBytes)
-                                    //logger.LogInformation(prediction.Sexy.ToString() + " -> " + (e.HttpClient.Request.Url))
-                                    // TODO: cahce image hash and prediction?
                                 
                                     if prediction.Pornography > proxyConf.PornBlockerThreshold then
                                         e.SetResponseBody(pornBlockerImageFile)
@@ -95,11 +94,12 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configura
 
     interface  IHostedService with 
         member x.StartAsync(cancellationToken: CancellationToken)=
-            proxyServer <- new ProxyServer(proxyConf.ProxyCertPath, "phillipiansproxy",true,true,true)
+        // TODo shpudl those be false for a one time trust? or separate app for trust??
+            proxyServer <- new ProxyServer(proxyConf.ProxyCertPath, "phillipiansproxy",false,false,false)
             proxyServer.CertificateManager.PfxPassword <- proxyCertPassword
             // locally trust root certificate used by this proxy 
             proxyServer.CertificateManager.CertificateEngine <- Network.CertificateEngine.DefaultWindows; 
-            proxyServer.CertificateManager.EnsureRootCertificate();
+            //proxyServer.CertificateManager.EnsureRootCertificate();
             //proxyServer.add_BeforeRequest h;
             proxyServer.add_BeforeResponse h;
             let explicitEndPoint = new ExplicitProxyEndPoint(IPAddress.Any, 8000, true);
