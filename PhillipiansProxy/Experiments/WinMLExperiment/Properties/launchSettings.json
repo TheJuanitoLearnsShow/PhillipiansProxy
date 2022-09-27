@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "WinMLExperiment": {
+      "commandName": "Project",
+      "commandLineArgs": "\"E:\\test\\SqueezeNet.onnx\" \"E:\\test\\kitten_big.png\" directx"
+    },
+    "NSFWExperiment": {
+      "commandName": "Project",
+      "commandLineArgs": "\"E:\\test\\nsfw.onnx\" \"E:\\test\\s1.jpg\" directx"
+    }
+  }
+}
