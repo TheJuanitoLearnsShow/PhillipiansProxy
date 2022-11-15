@@ -13,7 +13,7 @@
     "axios": "^0.21.1",
     "console-log-to-file": "^1.0.3",
     "http-proxy": "^1.18.1",
-    "jpeg-js": "^0.3.7",
+    "jpeg-js": "^0.4.4",
     "nsfwjs": "^2.4.1",
     "proxy-chain": "^1.0.2"
   },
