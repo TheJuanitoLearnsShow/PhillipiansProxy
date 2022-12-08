@@ -93,7 +93,7 @@ type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configura
     interface  IHostedService with 
         member x.StartAsync(cancellationToken: CancellationToken)=
         // TODo shpudl those be false for a one time trust? or separate app for trust??
-            proxyServer <- new ProxyServer(proxyConf.ProxyCertPath, "phillipiansproxy",false,false,false)
+            proxyServer <- new ProxyServer(proxyConf.ProxyCertPath, "phillipiansproxy",true,true,false)
             proxyServer.CertificateManager.PfxPassword <- proxyCertPassword
             // locally trust root certificate used by this proxy 
             proxyServer.CertificateManager.CertificateEngine <- Network.CertificateEngine.DefaultWindows; 

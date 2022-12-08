@@ -40,7 +40,7 @@
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="TaskBuilder.fs" Version="2.1.0" />
     <PackageReference Include="Titanium.Web.Proxy" Version="3.2.0" />
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.10.0" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NsfwSpy\NsfwSpy.csproj" />
