@@ -32,8 +32,6 @@ type ProxyServiceConfiguration()=
 
 type ProxyService(logger: ILogger<ProxyService>, nsfwEngine: INsfwSpy, configuration: IConfiguration) = 
     let mutable proxyServer:ProxyServer = null
-    let predictorFolderPath = @"E:\OneDrive\sources\PhillipiansProxy\JS\out\"
-    let predictorPath = @"index.js"
     let proxyConf = configuration.GetSection(nameof ProxyServiceConfiguration).Get<ProxyServiceConfiguration>()
     let proxyCertPassword = configuration.GetValue<string>("ProxyCertPassword")
     let pornBlockerImageFile = File.ReadAllBytes(proxyConf.PornBlockerImageFilePath)
